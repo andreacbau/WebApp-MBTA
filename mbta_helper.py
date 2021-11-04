@@ -8,13 +8,13 @@ MBTA_API_KEY = ""
 
 
 # A little bit of scaffolding if you want to use it
-ahahfh
+
 def get_json(url):
     """
     Given a properly formatted URL for a JSON web API request, return
     a Python JSON object containing the response to that request.
     """
-    pass
+    yoyoyoyoyoyoyo
 
 
 def get_lat_long(place_name):
