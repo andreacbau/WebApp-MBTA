@@ -1,5 +1,6 @@
-import urllib
-import 
+import urllib.request
+from pprint import pprint
+import json
 
 
 # Useful URLs (you need to add the appropriate parameters for your requests)
@@ -55,7 +56,7 @@ def main():
     """
     You can test all the functions here
     """
-    pass
+    print(get_json("http://www.mapquestapi.com/geocoding/v1/address"))
 
 
 if __name__ == '__main__':
