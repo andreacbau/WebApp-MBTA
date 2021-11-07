@@ -50,8 +50,8 @@ def get_nearest_station(latitude, longitude):
     See https://api-v3.mbta.com/docs/swagger/index.html#/Stop/ApiWeb_StopController_index for URL
     formatting requirements for the 'GET /stops' API.
     """
-mbta_data = (get_json(f"https://api-v3.mbta.com/stops?API_key={MBTA_API_KEY}&sort=distance&filter%5Blatitude%5D=40.63706&filter%5Blongitude%5D=-70.94161"))
-pprint(mbta_data)
+    mbta_data = (get_json(f"https://api-v3.mbta.com/stops?API_key={MBTA_API_KEY}&sort=distance&filter%5Blatitude%5D={latitude}&filter%5Blongitude%5D={longitude}"))
+    pprint(mbta_data)
 
 def find_stop_near(place_name):
     """
