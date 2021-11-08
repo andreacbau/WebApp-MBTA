@@ -22,7 +22,7 @@ def get_json(url):
     f = urllib.request.urlopen(url)
     response_text = f.read().decode('utf-8')
     response_data = json.loads(response_text)
-    pprint(response_data)
+    # pprint(response_data)
     return response_data
 
 def get_lat_long(place_name):
@@ -40,8 +40,8 @@ def get_lat_long(place_name):
     # pprint(locations)
     pure_location = locations["results"][0]["locations"]
     latitude_longitude = pure_location[0]["latLng"]
-    latitude_longitude = tuple(latitude_longitude.values())
-    return latitude_longitude
+    latitude_longitude = (latitude_longitude.values())
+    return tuple(latitude_longitude)
 
 def get_nearest_station(latitude, longitude):
     """
@@ -50,22 +50,35 @@ def get_nearest_station(latitude, longitude):
     See https://api-v3.mbta.com/docs/swagger/index.html#/Stop/ApiWeb_StopController_index for URL
     formatting requirements for the 'GET /stops' API.
     """
-    mbta_data = (get_json(f"https://api-v3.mbta.com/stops?API_key={MBTA_API_KEY}&sort=distance&filter%5Blatitude%5D={latitude}&filter%5Blongitude%5D={longitude}"))
-    pprint(mbta_data)
+    mbta_data = (get_json(f"https://api-v3.mbta.com/stops?api_key={MBTA_API_KEY}&sort=distance&filter%5Blatitude%5D={latitude}&filter%5Blongitude%5D={longitude}"))
+    mbta_station = mbta_data["data"][0]["attributes"]['name']
+    wheelchair_info = mbta_data["data"][0]["attributes"]["wheelchair_boarding"]
+    if wheelchair_info == 0: 
+        accessibility = "No W.C Information"
+    elif wheelchair_info == 1: 
+        accessibility = "W.C Accessible"
+    else:
+        accessibility = "W.C Inaccessible"
+    return (f"{mbta_station}: {accessibility}")
 
 def find_stop_near(place_name):
     """
     Given a place name or address, return the nearest MBTA stop and whether it is wheelchair accessible.
     """
-    pass    
+    specific_location = get_lat_long(place_name)
+    latitude = specific_location[0]
+    longitude = specific_location[1]
+    print(get_nearest_station(latitude,longitude)) 
 
 
 def main():
     """
     You can test all the functions here
     """
-    # print(get_lat_long(""))
-    
+    # print(get_lat_long("Fenway Park"))
+    # print(get_nearest_station(42.34169, -71.09756))
+    place_name = input("Please enter a specific location in Boston to view the nearest MBTA station and the wheelchair information: ")
+    find_stop_near(place_name)
 
 if __name__ == '__main__':
     main()
