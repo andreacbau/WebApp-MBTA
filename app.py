@@ -34,5 +34,10 @@ def get_nearest_station():
             error = True)
     return render_template("MBTA_form.html", error=None)
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("error_page.html")
+
+
 if __name__ == '__main__':
     app.run(debug=True)
