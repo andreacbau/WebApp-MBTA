@@ -1,0 +1,13 @@
+{% extends "header.html" %} 
+<!-- Exports header and navbar from header.html 
+     or any file you want-->
+{% block title %}Page Not Found{% endblock %} 
+{% block body %} 
+  
+  <h1>Sorry! We could not find a MBTA Station near you based on your 
+      place name input. 
+  </h1> 
+  <a href="{{ url_for('index') }}"><p>Click Here</a>To go to the Home Page and Try Again!</p> 
+  
+
+{% endblock %} 
