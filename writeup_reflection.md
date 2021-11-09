@@ -1,0 +1,10 @@
+# **Project Writeup and Reflection**
+## **Team Members:** 
+Andrea Baumgartner & Alejandro Wills 
+
+## **Writeup:**
+In this Project was a fun and interesting way of testing the skills we learned when working on Assignment 2 indiviually especially when it came to exploring differnt Python packages in order to access information on the web. The first thing we did was requst our API developer keys which we learned are basically a code that is used to identify and recognize a person or application. We then requested the response in JSON format in order to decode it. In order to extract the information we need for the app (latitudes and logitudes) we wrote a function to access these fields that we want and obtained our output using tuple. Next, we used this function in a second function we wrote that took the latitudes and logitudes obtained with the previous function and returns the name of the nearest MBTA stop and also if it is accessible by wheelchairs. Lastly for part 1, we wrote another function that embedded all previously written functions to build a tool that takes a location name or address as input, calculates its latitude/longitude, and produces the closest MBTA station as well as if it is wheelchair friendly. Next was Part 2, the Webapp. In part 2 we installed and read up on Flask in order to get familiar with it before using it to build our webapp which uses the python file with all the functions in part 1. In this website we created a home page where the user types a name of a place and clicks a 'submit' button via a form where it is sent via POST request to the Flask backend which will pass the request to POST /nearest mbta. Then our app provides the user an mbta station display, which will show them the closest MBTA stop as well as whether or not it is wheelchair friendly. If the persons' input is invalid, it directs them to a 404 error page with an option to go to the home page and try again. 
+
+
+## **Reflection:**
+Overall this project was very fun and challenging. It was a useful way of learning on our own and going through a lot of trial and error. 

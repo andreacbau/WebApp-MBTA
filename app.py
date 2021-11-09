@@ -37,5 +37,10 @@ def get_nearest_station():
 def page_not_found(e):
     return render_template("error_page.html")
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("error_page.html")
+
+
 if __name__ == '__main__':
     app.run(debug=True)
