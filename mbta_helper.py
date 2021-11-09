@@ -68,7 +68,7 @@ def find_stop_near(place_name):
     specific_location = get_lat_long(place_name)
     latitude = specific_location[0]
     longitude = specific_location[1]
-    print(get_nearest_station(latitude,longitude)) 
+    return get_nearest_station(latitude,longitude)
 
 
 def main():
