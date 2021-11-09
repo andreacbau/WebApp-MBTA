@@ -7,11 +7,9 @@ from mbta_helper import find_stop_near
 
 app = Flask(__name__)
 
-
 @app.route('/')
 def index():
     return render_template("index.html")
-
 
 @app.route("/hello/")
 def hello(name=None):
@@ -23,16 +21,21 @@ def hello(name=None):
 @app.route("/mbta/", methods=["GET", "POST"])
 def get_nearest_station():
     if request.method == "POST":
-        place = float(request.form["a"])
+        place = str(request.form["a"])
         nearest = find_stop_near(place)
         if nearest:
-            return render_template("Nearest_MBTA.html" , 
+            print(nearest)
+            return render_template("nearest_mbta.html" , 
             place=place, 
             nearest=nearest,)
         else: 
-            return render_template("MBTA_form.html", 
+            return render_template("mbta_form.html", 
             error = True)
-    return render_template("MBTA_form.html", error=None)
+    return render_template("mbta_form.html", error=None)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("error_page.html")
 
 if __name__ == '__main__':
     app.run(debug=True)
