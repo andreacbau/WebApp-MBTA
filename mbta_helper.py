@@ -1,5 +1,6 @@
-import urllib
-import 
+import urllib.request
+from pprint import pprint
+import json
 
 
 # Useful URLs (you need to add the appropriate parameters for your requests)
@@ -8,7 +9,7 @@ MBTA_BASE_URL = "https://api-v3.mbta.com/stops"
 
 # Your API KEYS (you need to use your own keys - very long random characters)
 MAPQUEST_API_KEY = "jvAFXd6tklkqAsG2UtNQAbwzwMHbGC8c"
-MBTA_API_KEY = ""
+MBTA_API_KEY = "3c65b5dd370a4f2dbc6c972820af984d"
 
 
 # A little bit of scaffolding if you want to use it
@@ -17,12 +18,12 @@ def get_json(url):
     """
     Given a properly formatted URL for a JSON web API request, return
     a Python JSON object containing the response to that request.
-    """
-    url = f'http://www.mapquestapi.com/geocoding/v1/address?key={MAPQUEST_API_KEY}&location=Babson%20College'
+    """ 
     f = urllib.request.urlopen(url)
     response_text = f.read().decode('utf-8')
     response_data = json.loads(response_text)
-    pprint(response_data)
+    # pprint(response_data)
+    return response_data
 
 def get_lat_long(place_name):
     """
@@ -31,8 +32,21 @@ def get_lat_long(place_name):
     See https://developer.mapquest.com/documentation/geocoding-api/address/get/
     for Mapquest Geocoding  API URL formatting requirements.
     """
-    pass
-
+    """Chanages all spaces to %20 so that the url can read it"""
+    if " " in place_name:
+        place_name = place_name.replace(" ","%20")
+        """specifies to only look in the Boston,MA area"""
+    state = "MA"
+    city = "Boston"
+    locations = (get_json(f"http://www.mapquestapi.com/geocoding/v1/address?key={MAPQUEST_API_KEY}&location={place_name},{state},{city}%20"))
+    # pprint(locations)
+    '''tells the get_json file to look under results and locations'''
+    pure_location = locations["results"][0]["locations"]
+    '''tells the get_json file to only get the latitude and longitude'''
+    latitude_longitude = pure_location[0]["latLng"]
+    latitude_longitude = (latitude_longitude.values())
+    '''returns a tuple of the lat and long'''
+    return tuple(latitude_longitude)
 
 def get_nearest_station(latitude, longitude):
     """
@@ -41,22 +55,40 @@ def get_nearest_station(latitude, longitude):
     See https://api-v3.mbta.com/docs/swagger/index.html#/Stop/ApiWeb_StopController_index for URL
     formatting requirements for the 'GET /stops' API.
     """
-    pass
-
+    mbta_data = (get_json(f"https://api-v3.mbta.com/stops?api_key={MBTA_API_KEY}&sort=distance&filter%5Blatitude%5D={latitude}&filter%5Blongitude%5D={longitude}"))
+    '''tells the get_json file to look under data and attributes'''
+    mbta_station = mbta_data["data"][0]["attributes"]['name']
+    '''tells the get_json file to only look at the wheelchair boarding info'''
+    wheelchair_info = mbta_data["data"][0]["attributes"]["wheelchair_boarding"]
+    '''Gives us the accessibility of each station'''
+    if wheelchair_info == 0: 
+        accessibility = "No W.C Information"
+    elif wheelchair_info == 1: 
+        accessibility = "W.C Accessible"
+    else:
+        accessibility = "W.C Inaccessible"
+    return (f"{mbta_station}: {accessibility}")
 
 def find_stop_near(place_name):
     """
     Given a place name or address, return the nearest MBTA stop and whether it is wheelchair accessible.
     """
-    pass
+    specific_location = get_lat_long(place_name)
+    '''only gets the first variable in the lat&long tuple'''
+    latitude = specific_location[0]
+    '''only gets the second variable in the lat&long tuple'''
+    longitude = specific_location[1]
+    return get_nearest_station(latitude,longitude)
 
 
 def main():
     """
     You can test all the functions here
     """
-    pass
-
+    # print(get_lat_long("Fenway Park"))
+    # print(get_nearest_station(42.34169, -71.09756))
+    place_name = input("Please enter a specific location in Boston to view the nearest MBTA station and the wheelchair information: ")
+    find_stop_near(place_name)
 
 if __name__ == '__main__':
     main()
